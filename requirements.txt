@@ -4,4 +4,3 @@ streamlit
 datetime
 timedelta
 openpyxl
-base64
