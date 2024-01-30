@@ -253,13 +253,27 @@ if st.button(":blue[**NÓMINAS**]"):    # De color AZUL (:blue[]) y en NEGRITA(*
                 st.dataframe(Ver_df_BusinessCentral)
 
                 ### i) DESCARGAR EL RESULTADO:
-                data_csv= df_BusinessCentral.to_csv(sep=';',                           # SEPARADOR (En Columnas).
-                                                    date_format='%d/%m/%Y',            # FORMATO de la FECHA.
-                                                    index=False)                       # SIN Índice.
+              #  data_csv= df_BusinessCentral.to_csv(sep=';',                           # SEPARADOR (En Columnas).
+               #                                     date_format='%d/%m/%Y',            # FORMATO de la FECHA.
+                #                                    index=False)                       # SIN Índice.
                 ## BOTÓN de DOWNLOAD!!
-                st.download_button(label=':green[**Descargar Nóminas**] :inbox_tray:', # NOMBRE del BOTÓN. (Verde y Negrita + Emoji).
-                                   data= data_csv,                                     # DATOS.
-                                   file_name= f'PAGO_NOMINAS_BC_{Mes_Pago}.csv')       # NOMBRE ARCHIVO que se GUARDA.
+                #st.download_button(label=':green[**Descargar Nóminas**] :inbox_tray:', # NOMBRE del BOTÓN. (Verde y Negrita + Emoji).
+                 #                  data= data_csv,                                     # DATOS.
+                  #                 file_name= f'PAGO_NOMINAS_BC_{Mes_Pago}.csv')       # NOMBRE ARCHIVO que se GUARDA.
+
+
+
+                # Obtén los datos CSV como bytes
+                csv_data = df_BusinessCentral.to_csv(sep=';', date_format='%d/%m/%Y', index=False).encode()
+
+                # Crea un enlace para descargar el archivo CSV
+                b64 = base64.b64encode(csv_data).decode()
+                st.markdown(f'<a href="data:file/csv;base64,{b64}" download="PAGO_NOMINAS_BC_{Mes_Pago}.csv">:green[**Descargar Nóminas**] :inbox_tray:</a>', unsafe_allow_html=True)
+
+
+
+
+        
               #..................................................................................................................................................................#
 
         except Exception as e:             # Si al intentar ejecutar la FUNCIÓN hay un ERROR...
