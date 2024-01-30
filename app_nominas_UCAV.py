@@ -263,12 +263,11 @@ if st.button(":blue[**NÓMINAS**]"):    # De color AZUL (:blue[]) y en NEGRITA(*
 
 
 
-                # Obtén los datos CSV como bytes
-                csv_data = df_BusinessCentral.to_csv(sep=';', date_format='%d/%m/%Y', index=False).encode()
-
-                # Crea un enlace para descargar el archivo CSV
-                b64 = base64.b64encode(csv_data).decode()
-                st.markdown(f'<a href="data:file/csv;base64,{b64}" download="PAGO_NOMINAS_BC_{Mes_Pago}.csv">:green[**Descargar Nóminas**] :inbox_tray:</a>', unsafe_allow_html=True)
+                # Botón de descarga usando enlace HTML
+                csv = df_BusinessCentral.to_csv(sep=';', index=False, date_format='%d/%m/%Y')
+                b64 = base64.b64encode(csv.encode()).decode()  # Codificar en base64 para descargar
+                href = f'<a href="data:file/csv;base64,{b64}" download="PAGO_NOMINAS_BC_{Mes_Pago}.csv">:green[**Descargar Nóminas**] :inbox_tray:</a>'
+                st.markdown(href, unsafe_allow_html=True)
 
 
 
