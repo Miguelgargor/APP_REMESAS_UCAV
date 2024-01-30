@@ -3,6 +3,7 @@ import numpy as np                         # Tratamiento de Datos.
 import streamlit as st                     # Página Web.
 from datetime import datetime, timedelta   # Fechas.
 import base64                              # Descarga Archivo.
+import tempfile
 
 def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Documento, Mes_Pago):
 
@@ -263,13 +264,21 @@ if st.button(":blue[**NÓMINAS**]"):    # De color AZUL (:blue[]) y en NEGRITA(*
 
 
 
-                # Botón de descarga usando enlace HTML
-                csv = df_BusinessCentral.to_csv(sep=';', index=False, date_format='%d/%m/%Y')
-                b64 = base64.b64encode(csv.encode()).decode()  # Codificar en base64 para descargar
-                href = f'<a href="data:file/csv;base64,{b64}" download="PAGO_NOMINAS_BC_{Mes_Pago}.csv">:green[**Descargar Nóminas**] :inbox_tray:</a>'
-                st.markdown(href, unsafe_allow_html=True)
 
 
+                # Crear un archivo temporal para guardar el DataFrame como CSV
+                temp_csv = tempfile.NamedTemporaryFile(delete=False, suffix='.csv')
+                df_BusinessCentral.to_csv(temp_csv.name, sep=';', index=False, date_format='%d/%m/%Y')
+                
+                # Crear un enlace de descarga usando el archivo temporal
+                with open(temp_csv.name, 'rb') as file:
+                    csv_content = file.read()
+                    b64 = base64.b64encode(csv_content).decode()
+                    href = f'<a href="data:file/csv;base64,{b64}" download="PAGO_NOMINAS_BC_{Mes_Pago}.csv">:green[**Descargar Nóminas**] :inbox_tray:</a>'
+                    st.markdown(href, unsafe_allow_html=True)
+                
+                # Limpiar el archivo temporal después de la descarga
+                temp_csv.close()
 
 
         
