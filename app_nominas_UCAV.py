@@ -253,6 +253,7 @@ if st.button(":blue[**NÓMINAS**]"):    # De color AZUL (:blue[]) y en NEGRITA(*
 
                 ### i) DESCARGAR EL RESULTADO:
                 data_csv= df_BusinessCentral.to_csv(sep=';',                           # SEPARADOR (En Columnas).
+                                                    encoding='utf-8',                  # ENCODING.
                                                     date_format='%d/%m/%Y',            # FORMATO de la FECHA.
                                                     index=False)                       # SIN Índice.
                 ## BOTÓN de DOWNLOAD!!
