@@ -1,8 +1,8 @@
-import pandas as pd
-import numpy as np
-import streamlit as st
-from datetime import datetime, timedelta
-
+import pandas as pd                        #  Tratamiento de Datos.
+import numpy as np                         # Tratamiento de Datos.
+import streamlit as st                     # Página Web.
+from datetime import datetime, timedelta   # Fechas.
+import base64                              # Descarga Archivo.
 
 def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Documento, Mes_Pago):
 
