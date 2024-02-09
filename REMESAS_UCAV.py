@@ -406,9 +406,8 @@ if ELEGIR_OPCION== INICIO:
     #--------------------------------------------------------------------------------------#
     st.write(''); st.write('') # LÍNEAS en BLANCO.
     # Escritura.
-    st.write('Genera las remesas necesarias de manera precisa, facilitando su registro en Business Central.')
-    st.write('Elija la remesa que desee en la barra lateral.')
-    st.write(''); st.write('') # LÍNEAS en BLANCO.
+    st.markdown('#### Genera las remesas necesarias de manera precisa, facilitando su registro en Business Central.')
+    st.markdown('#### Elija la remesa que desee en la barra lateral.')
 ############################################################################################################################################################################################
 
 ## D) CUERPO DE LA PÁGINA WEB-> NÓMINAS:
