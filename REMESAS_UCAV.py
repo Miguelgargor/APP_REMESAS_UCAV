@@ -246,7 +246,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_TRABAJADORES['Tipo documento']= 'Pago'
     df_TRABAJADORES['Nº documento']= Num_Documento
     df_TRABAJADORES['Tipo mov.']= 'Cuenta'
-    df_TRABAJADORES['Nº cuenta']= '47500001'                                # RETENCIONES de TRABAJADORES !!!
+    df_TRABAJADORES['Nº cuenta']= '47510001'                                # RETENCIONES de TRABAJADORES !!!
     df_TRABAJADORES['Tipo contrapartida']= 'Cuenta'
     df_TRABAJADORES['Op. triangular']='No'
     df_TRABAJADORES['Corrección']= 'No'
@@ -281,7 +281,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_COLABORADORES['Tipo documento']= 'Pago'
     df_COLABORADORES['Nº documento']= Num_Documento
     df_COLABORADORES['Tipo mov.']= 'Cuenta'
-    df_COLABORADORES['Nº cuenta']= '47500002'                                # RETENCIONES de COLABORADORES !!!
+    df_COLABORADORES['Nº cuenta']= '47510002'                                # RETENCIONES de COLABORADORES !!!
     df_COLABORADORES['Tipo contrapartida']= 'Cuenta'
     df_COLABORADORES['Op. triangular']='No'
     df_COLABORADORES['Corrección']= 'No'
@@ -319,7 +319,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_PROFESIONALES['Tipo documento']= 'Pago'
     df_PROFESIONALES['Nº documento']= Num_Documento
     df_PROFESIONALES['Tipo mov.']= 'Cuenta'
-    df_PROFESIONALES['Nº cuenta']= '47500003'                                # RETENCIONES de COLABORADORES !!!
+    df_PROFESIONALES['Nº cuenta']= '47510003'                                # RETENCIONES de COLABORADORES !!!
     df_PROFESIONALES['Tipo contrapartida']= 'Cuenta'
     df_PROFESIONALES['Op. triangular']='No'
     df_PROFESIONALES['Corrección']= 'No'
@@ -776,7 +776,7 @@ if ELEGIR_OPCION== RETENCIONES:
                     ### g) DESCARGAR EL RESULTADO:
                     Excel_buffer= io.BytesIO()                                              # Almacén de DATOS BINARIOS.
                     with pd.ExcelWriter(Excel_buffer, engine='xlsxwriter') as Excel_writer: # Cualquier cosa que se ESCRIBA dentro de esto-> Irá al BUFFER (Almacén) BINARIO.
-                        df_FINAL.to_excel(Excel_writer, index=False, sheet_name='SEGUROS SALUD')       # Escribimos como EXCEL el DATAFRAME del resultado.
+                        df_FINAL.to_excel(Excel_writer, index=False, sheet_name='RETENCIONES')       # Escribimos como EXCEL el DATAFRAME del resultado.
 
                     # Obtener el CONTENIDO BINARIO del archivo Excel:
                     Excel_Binario= Excel_buffer.getvalue()                                  # Conseguir el CONTENIDO del ARCHIVO anterior BINARIO (El del Buffer).
