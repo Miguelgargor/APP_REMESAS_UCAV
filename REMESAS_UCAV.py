@@ -706,10 +706,11 @@ if ELEGIR_OPCION== RETENCIONES:
         ## F.4.) VISUALIZAR Y GUARDAR EL RESULTADO:
                     Ver_df_BusinessCentral= df_FINAL[['Fecha registro','Tipo documento','Nº documento','Tipo mov.',           # SÓLO COLUMNAS IMPORTANTES #
                                                       'Nº cuenta','Descripción','Importe (DL)','Tipo contrapartida','Cta. contrapartida', 'Empleados Código']].copy() # a) COPIA para NO Modificar el original.
-                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)         # b) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1        # c) Empezar el ÍNDICE desde el 1.
+                    Ver_df_BusinessCentral['Empleados Código']= Ver_df_BusinessCentral['Empleados Código'].astype(str)  # b) Pasar a TIPO STRING (Para visualizar los Nº como String [Sin ","]).
+                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)         # c) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1        # d) Empezar el ÍNDICE desde el 1.
 
-                    # d) 2 COLUMNAS-> IMPORTE_TOTAL y Si se han conseguido las FILAS correctas ó no. (El mismo Nº de Filas que la Remesa del Banco).
+                    # e) 2 COLUMNAS-> IMPORTE_TOTAL y Si se han conseguido las FILAS correctas ó no. (El mismo Nº de Filas que la Remesa del Banco).
                     cl1, cl2, cl3, cl4= st.columns(4)
                     with cl1:
                         st.markdown(f"#### :blue[Importe Total:] {Importe_Total_Linea_BANCO_VISUALIZACION}") # IMPORTE TOTAL DE LA REMESA "BC".
@@ -767,12 +768,12 @@ if ELEGIR_OPCION== RETENCIONES:
                     #...........................................................................................#
                     st.write(''); st.write('') # LÍNEAS en BLANCO.  
 
-                    # e) MOSTRAR el DF_RESULTADO:
+                    # f) MOSTRAR el DF_RESULTADO:
                     st.write(''); st.write('') # LÍNEAS en BLANCO.  
                     st.subheader('📍 ARCHIVO BUSINESS CENTRAL:')
                     st.dataframe(Ver_df_BusinessCentral)
 
-                    ### f) DESCARGAR EL RESULTADO:
+                    ### g) DESCARGAR EL RESULTADO:
                     Excel_buffer= io.BytesIO()                                              # Almacén de DATOS BINARIOS.
                     with pd.ExcelWriter(Excel_buffer, engine='xlsxwriter') as Excel_writer: # Cualquier cosa que se ESCRIBA dentro de esto-> Irá al BUFFER (Almacén) BINARIO.
                         df_FINAL.to_excel(Excel_writer, index=False, sheet_name='SEGUROS SALUD')       # Escribimos como EXCEL el DATAFRAME del resultado.
