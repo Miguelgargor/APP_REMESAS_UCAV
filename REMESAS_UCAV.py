@@ -918,7 +918,7 @@ if ELEGIR_OPCION== PROVEEDORES:
         #--------------------------------------------------------------------------------------#
     st.write(''); st.write('') # LÍNEAS en BLANCO.
     # Escritura.
-    st.write('Genera el documento con los ***pagos de facturas** de los diferentes ***Proveedores*** de manera precisa, para tan solo tener que ***copiar y pegar***, facilitando su registro en Business Central.')
+    st.write('Genera el documento con los ***pagos de facturas*** de los diferentes ***Proveedores*** de manera precisa, para tan solo tener que ***copiar y pegar***, facilitando su registro en Business Central.')
     st.write('Primero elige las opciones necesarias a continuación. Después, sólamente tienes que pulsar en *"**GENERAR ASIENTOS CONTABLES**"*.')
     st.write(''); st.write('') # LÍNEAS en BLANCO.
     #========================================================================================================================================================================================#
