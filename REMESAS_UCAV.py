@@ -3,6 +3,7 @@ import numpy as np                         # Tratamiento de Datos.
 import streamlit as st                     # Página Web.
 from datetime import datetime, timedelta   # Fechas.
 import io                                  # Descarga y manejo de EXCEL.
+import re                                  # Expresiones Regulares (Tratamiento de Texto).
 
 
 def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Documento, Mes_Pago):
@@ -373,6 +374,116 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     return df_FINAL, Importe_Total_Linea_BANCO_VISUALIZACION, Importe_Total_Trabajadores_VISUALIZACION, Importe_Total_Colaboradores_VISUALIZACION, Importe_Total_Profesionales_VISUALIZACION, Num_Retenc_Trabajadores, Num_Retenc_Colaboradores, Num_Retenc_Profesionales, Reten_Importe_0_Trabajadores, Reten_Importe_0_Colaboradores, Reten_Importe_0_Profesionales
 ############################################################################################################################################################################################
 
+def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, Num_Documento):
+## A) TRATAMIENTO DEL EXCEL DE EMPLEADOS:
+    # A.0º) Lectura de los datos LISTA PROVEEDORES:
+    df_codigo_proveedores= pd.read_excel(LISTA_PROVEEDORES)
+    df_codigo_proveedores= df_codigo_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.1º) Eliminación de las tildes y cambio de Ñ por N:
+    df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True, inplace=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.2º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.strip()
+    def eliminar2espacios(texto):
+        if isinstance(texto, str):
+            return re.sub(r'\s{2,}', ' ', texto)   # CAMBIAR 2 ó + ESPACIOS-> Por 1 SÓLO.
+        else:
+            return texto
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].apply(eliminar2espacios) # Aplica la función anterior a la columna 'Nombre'.
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.3º) Sustitución de "M." y "Mª" por MARIA:
+    df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True, inplace=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.4º) Eliminación de "." y "-":
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[.]','', regex=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('-',' ', regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.5º) Quedarse sólo con las columnas que interesan:
+    df_codigo_proveedores= df_codigo_proveedores[['Nº', 'Nombre', 'Nº teléfono', 'Contacto', 'Alias', 'Saldo (DL)', 'Saldo vencido (DL)', 'Pagos (DL)']]
+#==========================================================================================================================================================================================#
+
+## B) TRATAMIENTO DEL EXCEL DE LA REMESA DEL BANCO:
+    # B.0º) Lectura de los datos BANCO:
+    df_banco_proveedores= pd.read_excel(EXCEL_REMESA_PROVEEDORES, header=15)  # Cargo los datos de la REMESA de PROVEEDORES e indico la Fila del Encabezado.
+    df_banco_proveedores= df_banco_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.1º) Eliminación de las tildes y cambio de Ñ por N:
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.2º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].str.strip()
+    def eliminar2espacios(texto):
+        if isinstance(texto, str):
+            return re.sub(r'\s{2,}', ' ', texto)   # CAMBIAR 2 ó + ESPACIOS-> Por 1 SÓLO.
+        else:
+            return texto
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].apply(eliminar2espacios) # Aplica la función anterior a la columna 'Beneficiario'.
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.3º) Sustitución de "M." y "Mª" por MARIA:
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.4º) Eliminación de "." y "-" y "EUR" (del IMPORTE):
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[.]','', regex=True)
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('-',' ', regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.5º) Modificación de la columna del IMPORTE:
+    df_banco_proveedores['Importe']= df_banco_proveedores['Importe'].str.replace(' EUR','', regex=True)      # Eliminar "EUR".
+    df_banco_proveedores['Importe']= '-' + df_banco_proveedores['Importe'].str.replace('[.]','', regex=True) # Eliminar el "." y poner el Importe en NEGATIVO.
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.6º) Creación de NUEVA COLUMNA-> "CONCEPTO - PROVEEDOR" para Business Central:
+    df_banco_proveedores['DESCRIPCION_BC']= df_banco_proveedores.Concepto + ' - ' + df_banco_proveedores.Beneficiario
+#==========================================================================================================================================================================================#
+
+## C) UNIÓN DE LOS 2 DF SEGÚN EL NOMBRE "TRATADO"-> PARA CONSEGUIR EL " Nº PROVEEDOR":
+    df_resultado= pd.merge(df_banco_proveedores, df_codigo_proveedores,                     # Df's a unir.
+                            left_on='Beneficiario_tratado', right_on='Nombre',              # A la izquierda el Df_BANCO y a la derecha Df_CÓDIGO_PROVEEDORES.
+                            how='left')                                                     # Unión por el Df de la Izquierda (BANCO).
+
+    # C.1º) "np.where" para dejar el 'CÓDIGO' sólo cuando COINCIDEN (y deja los demás como 'NaN'):
+    df_resultado['Nº']= np.where(df_resultado['Nº'].notna(), df_resultado['Nº'], np.nan)
+
+    # C.2º) Columnas que se mantendrán en el resultado:
+    df_resultado= df_resultado[['Nº','Beneficiario', 'Beneficiario_tratado', 'DESCRIPCION_BC', 'Importe']]
+#==========================================================================================================================================================================================#
+
+## D) CREACIÓN DEL DataFrame PARA SUBIR A "BUSINESS CENTRAL":
+    df= pd.DataFrame()
+    df['Importe (DL)']= df_resultado['Importe']
+    df['Descripción']= df_resultado['DESCRIPCION_BC']
+    df['Fecha registro']= pd.to_datetime(Fecha, format='%d/%m/%Y').strftime('%d/%m/%Y')
+    df['Fecha de IVA']= df['Fecha registro']
+    df['Tipo documento']= 'Pago'
+    df['Nº documento']= Num_Documento
+    df['Tipo mov.']= 'Banco'
+    df['Nº cuenta']= 'SANTANDER02'
+    df['Tipo contrapartida']= 'Proveedor'
+    df['Cta. contrapartida']= df_resultado['Nº']
+    df['Op. triangular']='No'
+    df['Corrección']= 'No'
+    df[['Nº asiento','Importe debe','Importe haber','Importe','Liq. por nº documento','Liq. por tipo documento','Tipo de registro gen.','Grupo contable neg. gen.','Grupo contable prod. gen.','Tipo regis. contrapartida',
+    'Gr. contable negocio contrap.','Gr. contable producto contrap.','Código de fraccionamiento','Comentario','Tipo de id.','Nombre de empresa correcto','CIF/NIF correcto','Titulacion Código',
+    'Cód. dim. acceso directo 4','Interface Code','Nombre de cuenta','Empleados Código','CECO Código']]=None
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+    # D.1º) ORDENACIÓN DE COLUMNAS:
+    df_FINAL= df[['Fecha registro', 'Fecha de IVA', 'Nº asiento', 'Tipo documento', 'Nº documento', 'Tipo mov.', 'Nº cuenta', 'Nombre de cuenta', 'Descripción', 'Importe debe', 'Importe haber', 'Importe',
+            'Importe (DL)', 'Tipo contrapartida', 'Cta. contrapartida', 'Liq. por nº documento', 'Liq. por tipo documento', 'Op. triangular', 'Empleados Código', 'CECO Código', 'Tipo de registro gen.',
+            'Grupo contable neg. gen.', 'Grupo contable prod. gen.', 'Tipo regis. contrapartida', 'Gr. contable negocio contrap.', 'Gr. contable producto contrap.', 'Código de fraccionamiento', 'Corrección',
+            'Comentario', 'Tipo de id.', 'Nombre de empresa correcto', 'CIF/NIF correcto', 'Titulacion Código', 'Cód. dim. acceso directo 4', 'Interface Code']]
+#==========================================================================================================================================================================================#
+
+## E) VISUALIZAR SÓLO LOS CASOS EN LOS QUE NO SE HA CONSEGUIDO UNIR EL "CODIGO PROVEEDOR":
+    Códigos_FALTANTES= df_resultado[df_resultado['Nº'].isna()].copy()                # QUEDARSE CON LOS QUE NO COINCIDEN CON EL CÓDIGO.
+#==========================================================================================================================================================================================#
+
+## F) COMPARACIÓN Nº FILAS BANCO vs. Nº FILAS UNIÓN:
+    num_Filas_BANCO= len(df_banco_proveedores)
+    num_Filas_UNION= len(df_resultado)
+
+    return df_FINAL, Códigos_FALTANTES, num_Filas_BANCO, num_Filas_UNION
+############################################################################################################################################################################################
+
 ## A) CONFIGURACIÓN GENERAL DE LA PÁGINA WEB:
 st.set_page_config(page_title="REMESAS UCAV",                                                                             # Nombre en el Navegador.
                    page_icon="https://raw.githubusercontent.com/Miguelgargor/IMAGENES_APPs/main/logoUcav_navegador.png",  # Icono del Navegador.
@@ -383,10 +494,10 @@ st.set_page_config(page_title="REMESAS UCAV",                                   
 ## B) BARRA LATERAL: (Indicar el Tipo de Remesa):
 st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
-INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'
-ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                             # Título Oculto Selector.
-                                options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES],                                            # Opciones.
-                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*']) # Texto Explicativo debajo de cada Opción.
+INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **PROVEEDORES**'
+ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
+                                options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],                                                                    # Opciones.
+                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores.*'])     # Texto Explicativo debajo de cada Opción.
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
@@ -791,4 +902,134 @@ if ELEGIR_OPCION== RETENCIONES:
                 st.error(f"Error: {str(e)}")
         else:
             st.warning(' ¡Cargue el archivo correcto con la remesa de Retenciones!', icon="⚠️") # Muestra como WARNING si NO has insertado el ARCHIVO CORRECTO de DATOS.
+############################################################################################################################################################################################
+
+## H) CUERPO DE LA PÁGINA WEB-> REMESA PROVEEDORES:
+if ELEGIR_OPCION== PROVEEDORES:
+    col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
+
+    ## H.1.) IMAGEN CON HIPERVÍNCULO: (En la Columna 1) + TÍTULO PÁGINA WEB (En la Columna 3) + TEXTO EXPLICATIVO:
+    with col1:                       # URL HIPERVÍNCULO #      # Se abrirá en una nueva pestaña #    # URL IMAGEN #                                                                     # ANCHO #
+        col1 = st.markdown('<a href="https://www.ucavila.es/" target="_blank"><img src="https://raw.githubusercontent.com/Miguelgargor/IMAGENES_APPs/main/UCAV_logo.png" alt="UCAV Logo" width="300"></a>',
+                        unsafe_allow_html=True) # Permitir usar HTML #
+
+    with col3:               #h1: Encabezado# #Color#   #Texto#                        #Permitir HTML#
+        col3= st.markdown(f'<h1 style="color:#024868;">PAGO DE FACTURAS A PROVEEDORES UCAV</h1>', unsafe_allow_html=True)
+        #--------------------------------------------------------------------------------------#
+    st.write(''); st.write('') # LÍNEAS en BLANCO.
+    # Escritura.
+    st.write('Genera el documento con los pagos a los diferentes ***Proveedores*** de manera precisa, para tan solo tener que ***copiar y pegar***, facilitando su registro en Business Central.')
+    st.write('Primero elige las opciones necesarias a continuación. Después, sólamente tienes que pulsar en *"**GENERAR ASIENTOS CONTABLES**"*.')
+    st.write(''); st.write('') # LÍNEAS en BLANCO.
+    #========================================================================================================================================================================================#
+
+    ## H.2.) OPCIONES (INPUTS):
+    st.divider()
+    st.markdown('##### :red[OPCIONES]')    # Título en rojo.
+    # 2 FILAS de COLUMNAS:
+    c1, c2, c3, c4= st.columns(4)
+
+    #.................................................................#
+    with c1:
+        st.markdown('###### :open_file_folder: LISTA DE PROVEEDORES:')              # Encabezado + SÍMBOLO CARPETA.
+        with st.expander(':blue[**Cargar excel con la Lista de Proveedores**]'):    # BOTÓN QUE SE ABRE.
+            LISTA_PROVEEDORES = st.file_uploader(label='Lista_Proveedores', type=["xlsx", "xls"], label_visibility='collapsed')        # SUBIR UN ARCHIVO.
+    #.................................................................#
+    with c2:
+        st.markdown('###### :open_file_folder: REMESA NÓMINAS BANCO:')             # Encabezado + SÍMBOLO CARPETA.
+        with st.expander(':blue[**Cargar excel con la Remesa de Proveedores**]'):  # BOTÓN QUE SE ABRE.
+            EXCEL_REMESA_PROVEEDORES = st.file_uploader(label='Remesa_Banco_Prov', type=["xlsx", "xls"], label_visibility='collapsed')  # SUBIR UN ARCHIVO.
+    #.................................................................#
+    with c3:
+        st.markdown('###### :calendar: FECHA DE PAGO:', help=':blue[**dd/mm/yyyy**] ')                           # TÍTULO + SÍMBOLO CALENDARIO.
+        # Obtener la fecha del DÍA 28 del MES ANTERIOR al actual:
+        Fecha_defecto= datetime.now() - timedelta(days=datetime.now().day)     # ÚLTIMO DÍA MES ANTERIOR (Fecha Actual - Día Actual de Este Mes= Último Día Mes Anterior).
+        Fecha_defecto= Fecha_defecto.replace(day=28)                           # REEMPLAZAR POR EL DÍA 28.
+        Fecha= st.date_input(label="Fecha de Pago", value=Fecha_defecto, format="DD/MM/YYYY", label_visibility='collapsed') # ENTRADA DE FECHA.
+    #.................................................................#
+    with c4:
+        st.markdown('###### :page_with_curl: Nº DOCUMENTO:', help=':blue[**Ejemplo:**] BS2324-0001') # TÍTULO + SÍMBOLO HOJA.
+        Num_Documento= st.text_input(label='Nº Doc. Prov', label_visibility='collapsed')             # ENTRADA DE TEXTO.
+    st.divider()                                                                                     # LÍNEA HORIZONTAL.
+    #========================================================================================================================================================================================#
+
+    ## H.3.) BOTÓN de EJECUCIÓN:                                                             ## ¡¡FUNCIÓN!! ##
+    if st.button(":blue[**GENERAR ASIENTOS CONTABLES**]"):    # De color AZUL (:blue[]) y en NEGRITA(** **).
+        if LISTA_PROVEEDORES is not None and EXCEL_REMESA_PROVEEDORES is not None:
+            try:
+                with st.spinner('Cargando...'):      ### CARGANDO... ###
+                    # Llamar a la función:
+                    df_FINAL, Códigos_FALTANTES, num_Filas_BANCO, num_Filas_UNION= PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, Num_Documento)
+                    #··································································#
+
+        ## H.4.) VISUALIZAR Y GUARDAR EL RESULTADO:
+                    Ver_df_BusinessCentral= df_FINAL.copy()                          # a) COPIA para NO Modificar el original.
+                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)      # b) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1     # c) Empezar el ÍNDICE desde el 1.
+
+                    # d) FORMATO DE FECHA ¡EN STREAMLIT!:
+                    Ver_df_BusinessCentral['Fecha registro']= Ver_df_BusinessCentral['Fecha registro']
+
+                    # e) REPRESENTAR LOS NÚMERO DE PROVEEDOR COMO STRINGS Y SUSTITUIR "<NA>" POR "":
+                    Ver_df_BusinessCentral['Cta. contrapartida'] = Ver_df_BusinessCentral['Cta. contrapartida'].astype(str).replace('[,.]', '', regex=True).replace('<NA>','')
+
+                    # f) CAMBIOS EN LA "," (Decimales) Y EL "." (Miles) DEL "IMPORTE": [.->_ // ,->. // _->,]:
+                    Ver_df_BusinessCentral['Importe (DL)'] = Ver_df_BusinessCentral['Importe (DL)'].str.replace(',', '.').astype('float').apply(lambda x: '{:,.2f}'.format(x).replace('.', '_').replace(',', '.').replace('_', ','))
+
+                    # g) 2 COLUMNAS-> IMPORTE_TOTAL y Si se han conseguido las FILAS correctas ó no. (El mismo Nº de Filas que la Remesa del Banco).
+                    cl1, cl2= st.columns(2)
+                    with cl1:
+                        st.markdown(f"#### :blue[Importe Total:] {df_FINAL['Importe (DL)'].replace(',','.',regex=True).astype('float').sum():,.2f} €".replace('.', '_').replace(',', '.').replace('_', ',')) # IMPORTE TOTAL DE LA REMESA "BC" (Con cambios necesarios: . y , // Y tipo FLOAT).
+
+                    with cl2:
+                        if num_Filas_BANCO==num_Filas_UNION:                               # COMPARACIÓN Nº FILAS BANCO vs. Nº FILAS UNIÓN.
+                            st.success(' :blue[**Número de pagos correcto.** (No hay duplicados).]', icon="✅") # MENSAJE de ÉXITO.
+                        else:
+                            st.warning(f':red[***¡NÚMERO DE PAGOS INCORRECTO!***] (El Banco indica que en esta remesa hay :red[**{num_Filas_BANCO}**] pagos; y se han obtenido :red[**{num_Filas_UNION}**]. **¡Revisar si hay DUPLICADOS (con diferente Nº Proveedor) en la "Lista de Proveedores"!**).', icon="⚠️")
+                    st.write(''); st.write('') # LÍNEAS en BLANCO.  
+
+                    #...........................................................................................................................................#
+                    ## !! VISUALIZAR los CASOS_SIN Nº EMPLEADO:
+                    Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()               # a!) COPIA para NO Modificar el original.
+                    Ver_Códigos_FALTANTES.reset_index(drop=True, inplace=True)    # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1    # c!) Empezar el ÍNDICE desde el 1.
+
+                    # d!) REPRESENTAR LOS NÚMERO DE EMPLEADO COMO STRINGS Y SUSTITUIR "<NA>" POR "":
+                    Ver_Códigos_FALTANTES['Nº'] = Ver_Códigos_FALTANTES['Nº'].astype(str).replace('<NA>','')
+
+                    # e!) CAMBIOS EN LA "," (Decimales) Y EL "." (Miles) DEL "IMPORTE": [.->_ // ,->. // _->,]:
+                    Ver_Códigos_FALTANTES['Importe'] = Ver_Códigos_FALTANTES['Importe'].str.replace(',', '.').astype('float').apply(lambda x: '{:,.2f}'.format(x).replace('.', '_').replace(',', '.').replace('_', ','))
+
+
+
+
+                    # f!) MOSTRAR los CASOS_SIN Nº PROVEEDOR (En caso de que los haya [df>0]):
+                    if len(Códigos_FALTANTES)>0:  # Si hay algún caso que no se encuentre el Nº Proveedor... ("CÓDIO PROVEEDOR"= NAN):
+                        st.warning(f' :red[**NO SE HAN CONSEGUIDO LOS**] :green[**{len(Códigos_FALTANTES)}**] :red[**Nº DE PROOVEDORES SIGUIENTES:** *(Comprobar los nombres del proveedor)*:]', icon='⚠️') # WARNING.
+                        st.dataframe(Ver_Códigos_FALTANTES)                                                 # MOSTRAR CASOS SIN Nº PROVEEDOR.
+                    #...........................................................................................................................................#
+
+                    # g) MOSTRAR el DF_RESULTADO:
+                    st.write(''); st.write('') # LÍNEAS en BLANCO.  
+                    st.subheader('📍 ARCHIVO BUSINESS CENTRAL:')
+                    st.dataframe(Ver_df_BusinessCentral)
+
+                    # h) DESCARGAR EL RESULTADO:
+                    Excel_buffer= io.BytesIO()                                              # Almacén de DATOS BINARIOS.
+                    with pd.ExcelWriter(Excel_buffer, engine='xlsxwriter') as Excel_writer: # Cualquier cosa que se ESCRIBA dentro de esto-> Irá al BUFFER (Almacén) BINARIO.
+                        df_FINAL.to_excel(Excel_writer, index=False, sheet_name='PAGO PROVEEDORES')    # Escribimos como EXCEL el DATAFRAME del resultado.
+
+                    # Obtener el CONTENIDO BINARIO del archivo Excel:
+                    Excel_Binario= Excel_buffer.getvalue()                                  # Conseguir el CONTENIDO del ARCHIVO anterior BINARIO (El del Buffer).
+
+                    # BOTÓN de DOWNLOAD!!
+                    st.download_button(label=':green[**Descargar Pagos a Proveedores**] :inbox_tray:',    # NOMBRE del BOTÓN. (Verde y Negrita + Emoji).
+                                       data=Excel_Binario,                                                # DATOS-> BINARIOS.
+                                       file_name=f'PAGO_REMESA_PROVEEDORES_BC.xlsx')                      # NOMBRE ARCHIVO que se GUARDA.
+                #..................................................................................................................................................................#
+
+            except Exception as e:             # Si al intentar ejecutar la FUNCIÓN hay un ERROR...
+                st.error(f"Error: {str(e)}")
+        else:
+            st.warning(' ¡Cargue los archivos correctos con la lista de proveedores y la remesa del banco!', icon="⚠️") # Muestra como WARNING si NO has insertado los ARCHIVOS CORRECTOS de DATOS.
 ############################################################################################################################################################################################
