@@ -5,4 +5,3 @@ datetime
 timedelta
 openpyxl
 xlsxwriter
-re
