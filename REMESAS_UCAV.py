@@ -383,14 +383,14 @@ st.set_page_config(page_title="REMESAS UCAV",                                   
 ## B) BARRA LATERAL: (Indicar el Tipo de Remesa):
 st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
-INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':chart_with_downwards_trend: **RETENCIONES**'
+INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'
 ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                             # Título Oculto Selector.
                                 options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES],                                            # Opciones.
                                 captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*']) # Texto Explicativo debajo de cada Opción.
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
-st.sidebar.write('***Contacto de ayuda:***')        ## CONTACTO (De ayuda) ##
+st.sidebar.write(':e-mail: ***Contacto de ayuda:***')        ## CONTACTO (De ayuda) ##
 st.sidebar.write('miguel.garcia@ucavila.es')
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
