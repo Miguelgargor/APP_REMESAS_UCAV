@@ -386,9 +386,8 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     # A.2º) Sustitución de "M." y "Mª" por MARIA:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # A.3º) Añadir un ESPACIO (Temporal) detrás de cada punto y cada coma:
+    # A.3º) Añadir un ESPACIO (Temporal) detrás de cada coma:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace(',', ', ')
-    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('.', '. ')
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.4º) Eliminación de "." "," y "-":
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[.]','', regex=True)
@@ -422,9 +421,8 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     # B.2º) Sustitución de "M." y "Mª" por MARIA:
     df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.3º) Añadir un ESPACIO (Temporal) detrás de cada punto y cada coma:
+    # B.3º) Añadir un ESPACIO (Temporal) detrás de cada coma:
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace(',', ', ')
-    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('.', '. ')
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.4º) Eliminación de "." "," y "-":
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[.]','', regex=True)
