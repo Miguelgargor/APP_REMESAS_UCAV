@@ -390,7 +390,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace(',', ', ')
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.4º) Eliminación de "." "," y "-":
-    df_codigo_proveedores['Nombre'] = df_codigo_proveedores['Nombre'].str.apply(lambda x: re.sub(r'\. ', '', x))     # Quitar "." + Espacio!!
+    df_codigo_proveedores['Nombre'] = df_codigo_proveedores['Nombre'].str.replace(r'\. ', '')            # Quitar "." + Espacio!!
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[.]','', regex=True)
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[,]','', regex=True)
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('-',' ', regex=True)
@@ -426,7 +426,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace(',', ', ')
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.4º) Eliminación de "." "," y "-":
-    df_codigo_proveedores['Nombre'] = df_codigo_proveedores['Nombre'].str.apply(lambda x: re.sub(r'\. ', '', x))     # Quitar "." + Espacio!!
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].str.replace(r'\. ', '')            # Quitar "." + Espacio!!
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[.]','', regex=True)
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[,]','', regex=True)
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('-',' ', regex=True)
