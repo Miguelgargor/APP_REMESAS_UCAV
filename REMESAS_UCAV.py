@@ -15,13 +15,13 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     for columna in ['Nombre', 'Primer apellido', 'Segundo apellido']:
         ## A.1º) Eliminación de las tildes y cambio de Ñ por N:
-        df_codigo_empleados[columna].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True, inplace=True)
+        df_codigo_empleados[columna]= df_codigo_empleados[columna].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
         #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
         ## A.2º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
         df_codigo_empleados[columna]= df_codigo_empleados[columna].str.strip()
         #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
         ## A.3º) Sustitución de "M." y "Mª" por MARIA:
-        df_codigo_empleados[columna].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True, inplace=True)
+        df_codigo_empleados[columna]= df_codigo_empleados[columna].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
         #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
         ## A.4º) Eliminación de "." y "-":
         df_codigo_empleados[columna]= df_codigo_empleados[columna].str.replace('[.]','', regex=True)
@@ -30,12 +30,12 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
         ## A.5.1º) Eliminación de los "determinantes" (palabras con un espacio antes y después) y sustituirlos por un espacio en blanco (para evitar juntar Nombre y Apellido):
         determinantes= [' EL ',' LA ',' LO ',' LE ',' LES ',' LOS ',' LAS ',' DE ',' DEL ',' DA ',' DO ',' DI ',' UN ',' UNA ',' UNOS ',' UNAS ',' MAC ',' MC ',' VAN ',' VON ',' Y ', ' E ',' THE ','THE ',' OF ']
         for deter in determinantes:
-            df_codigo_empleados[columna].replace({deter:' '}, regex=True, inplace=True)
+            df_codigo_empleados[columna]= df_codigo_empleados[columna].replace({deter:' '}, regex=True)
 
         ## A.5.2º) Eliminación de los "determinantes" del PRINCIPIO (palabras con un espacio después) y sustituirlos por una cadena de texto vacía (para evitar espacios innecesarios):
         determinantes2= ['EL ','LA ','LO ','LE ','LES ','LOS ','LAS ','DE ','DEL ','DA ','DO ','DI ','UN ','UNA ','UNOS ','UNAS ','MAC ','MC ','VAN ','VON ','Y ', 'E ','THE ','OF ']
         for deter in determinantes2:
-            df_codigo_empleados[columna].replace({'^' + deter:''}, regex=True, inplace=True)
+            df_codigo_empleados[columna]= df_codigo_empleados[columna].replace({'^' + deter:''}, regex=True)
         #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.6º) Crear una columna con este orden APELLIDO1 + APELLIDO2 + NOMBRE (ya "limpios") y otra columna con el "NOMBRE COMPLETO"-> Teniendo en cuenta si tienen 2º APLL., 1º y 2º APLL. ...:
     # a) COLUMNA-> "APELLIDO1 + APELLIDO2 + NOMBRE":
@@ -126,14 +126,14 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
     df_NOMINA['Cta Contrapartida']= '46500000'
 
     df_NOMINA= df_NOMINA[['Fecha','No. Documento','Descripcion','Importe','Tipo mov','Banco','CECO','No. Empleado','Cta Contrapartida']] # ORDENAR COLUMNAS DEL CSV FINAL-> Para BUSINESS CENTRAL.
-    df_NOMINA.sort_values(by='Descripcion', ascending=True, inplace=True)                                                                # ORDENAR los VALORES según la "Descripción".
-    df_NOMINA.reset_index(drop=True, inplace=True)                                                                                       # RESETEO del ÍNDICE.
+    df_NOMINA= df_NOMINA.sort_values(by='Descripcion', ascending=True)                                                                # ORDENAR los VALORES según la "Descripción".
+    df_NOMINA= df_NOMINA.reset_index(drop=True)                                                                                       # RESETEO del ÍNDICE.
 #==========================================================================================================================================================================================#
 
 ## E) VISUALIZAR SÓLO LOS CASOS EN LOS QUE NO SE HA CONSEGUIDO UNIR EL "CODIGO EMPLEADO":
-    Códigos_FALTANTES= df_resultado[df_resultado['Nº'].isna()].copy()                # QUEDARSE CON LOS QUE NO COINCIDEN CON EL CÓDIGO.
-    Códigos_FALTANTES.sort_values(by='Beneficiario', ascending=True, inplace=True)   # ORDENAR los VALORES según la "Descripción".
-    Códigos_FALTANTES.reset_index(drop=True, inplace=True)                           # RESETEO del ÍNDICE.
+    Códigos_FALTANTES= df_resultado[df_resultado['Nº'].isna()].copy()                     # QUEDARSE CON LOS QUE NO COINCIDEN CON EL CÓDIGO.
+    Códigos_FALTANTES= Códigos_FALTANTES.sort_values(by='Beneficiario', ascending=True)   # ORDENAR los VALORES según la "Descripción".
+    Códigos_FALTANTES= Códigos_FALTANTES.reset_index(drop=True)                           # RESETEO del ÍNDICE.
 #==========================================================================================================================================================================================#
 
 ## F) COMPARACIÓN Nº FILAS BANCO vs. Nº FILAS UNIÓN:
@@ -381,10 +381,10 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_codigo_proveedores= df_codigo_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.1º) Eliminación de las tildes y cambio de Ñ por N:
-    df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True, inplace=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.2º) Sustitución de "M." y "Mª" por MARIA:
-    df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True, inplace=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.3º) Añadir un ESPACIO (Temporal) detrás de cada punto y cada coma:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace(',', ', ')
@@ -396,7 +396,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('-',' ', regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.5º) Eliminación de texto entre paréntesis:
-    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].apply(lambda x: re.sub(r'\(.*?\)', '', x))
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].astype(str).apply(lambda x: re.sub(r'\(.*?\)', '', x))
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.6º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.strip()
@@ -432,7 +432,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('-',' ', regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.5º) Eliminación de texto entre paréntesis:
-    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].apply(lambda x: re.sub(r'\(.*?\)', '', x))
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].astype(str).apply(lambda x: re.sub(r'\(.*?\)', '', x))
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.6º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
     df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.strip()
@@ -602,7 +602,7 @@ if ELEGIR_OPCION== NOMINAS:
 
         ## D.4.) VISUALIZAR Y GUARDAR EL RESULTADO:
                     Ver_df_BusinessCentral= df_BusinessCentral.copy()                       # a) COPIA para NO Modificar el original.
-                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)             # b) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral= Ver_df_BusinessCentral.reset_index(drop=True)   # b) RESETEAR el ÍNDICE (y eliminar el anterior).
                     Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1            # c) Empezar el ÍNDICE desde el 1.
 
                     # d) FORMATO DE FECHA ¡EN STREAMLIT!:
@@ -628,9 +628,9 @@ if ELEGIR_OPCION== NOMINAS:
 
                     #...........................................................................................................................................#
                     ## !! VISUALIZAR los CASOS_SIN Nº EMPLEADO:
-                    Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()               # a!) COPIA para NO Modificar el original.
-                    Ver_Códigos_FALTANTES.reset_index(drop=True, inplace=True)    # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1    # c!) Empezar el ÍNDICE desde el 1.
+                    Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()                     # a!) COPIA para NO Modificar el original.
+                    Ver_Códigos_FALTANTES= Ver_Códigos_FALTANTES.reset_index(drop=True) # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1          # c!) Empezar el ÍNDICE desde el 1.
 
                     # d!) REPRESENTAR LOS NÚMERO DE EMPLEADO COMO STRINGS Y SUSTITUIR "<NA>" POR "":
                     Ver_Códigos_FALTANTES['Nº'] = Ver_Códigos_FALTANTES['Nº'].astype(str).replace('<NA>','')
@@ -731,8 +731,8 @@ if ELEGIR_OPCION== SEGUROS_SALUD:
         ## E.4.) VISUALIZAR Y GUARDAR EL RESULTADO:
                     Ver_df_BusinessCentral= df_FINAL[['Fecha registro','Tipo documento','Nº documento','Tipo mov.',           # SÓLO COLUMNAS IMPORTANTES #
                                                       'Nº cuenta','Descripción','Importe (DL)','Tipo contrapartida','Cta. contrapartida']].copy() # a) COPIA para NO Modificar el original.
-                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)         # b) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1        # c) Empezar el ÍNDICE desde el 1.
+                    Ver_df_BusinessCentral= Ver_df_BusinessCentral.reset_index(drop=True)  # b) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1           # c) Empezar el ÍNDICE desde el 1.
 
                     # d) 2 COLUMNAS-> IMPORTE_TOTAL y Si se han conseguido las FILAS correctas ó no. (El mismo Nº de Filas que la Remesa del Banco).
                     cl1, cl2= st.columns(2)
@@ -834,8 +834,8 @@ if ELEGIR_OPCION== RETENCIONES:
                     Ver_df_BusinessCentral= df_FINAL[['Fecha registro','Tipo documento','Nº documento','Tipo mov.',           # SÓLO COLUMNAS IMPORTANTES #
                                                       'Nº cuenta','Descripción','Importe (DL)','Tipo contrapartida','Cta. contrapartida', 'Empleados Código']].copy() # a) COPIA para NO Modificar el original.
                     Ver_df_BusinessCentral['Empleados Código']= Ver_df_BusinessCentral['Empleados Código'].astype(str)  # b) Pasar a TIPO STRING (Para visualizar los Nº como String [Sin ","]).
-                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)         # c) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1        # d) Empezar el ÍNDICE desde el 1.
+                    Ver_df_BusinessCentral= Ver_df_BusinessCentral.reset_index(drop=True)  # c) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1           # d) Empezar el ÍNDICE desde el 1.
 
                     # e) 2 COLUMNAS-> IMPORTE_TOTAL y Si se han conseguido las FILAS correctas ó no. (El mismo Nº de Filas que la Remesa del Banco).
                     cl1, cl2, cl3, cl4= st.columns(4)
@@ -979,9 +979,9 @@ if ELEGIR_OPCION== PROVEEDORES:
                     #··································································#
 
         ## H.4.) VISUALIZAR Y GUARDAR EL RESULTADO:
-                    Ver_df_BusinessCentral= df_FINAL.copy()                          # a) COPIA para NO Modificar el original.
-                    Ver_df_BusinessCentral.reset_index(drop=True, inplace=True)      # b) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1     # c) Empezar el ÍNDICE desde el 1.
+                    Ver_df_BusinessCentral= df_FINAL.copy()                               # a) COPIA para NO Modificar el original.
+                    Ver_df_BusinessCentral= Ver_df_BusinessCentral.reset_index(drop=True) # b) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_df_BusinessCentral.index= Ver_df_BusinessCentral.index+1          # c) Empezar el ÍNDICE desde el 1.
 
                     # d) FORMATO DE FECHA ¡EN STREAMLIT!:
                     Ver_df_BusinessCentral['Fecha registro']= Ver_df_BusinessCentral['Fecha registro']
@@ -1006,9 +1006,9 @@ if ELEGIR_OPCION== PROVEEDORES:
 
                     #...........................................................................................................................................#
                     ## !! VISUALIZAR los CASOS_SIN Nº EMPLEADO:
-                    Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()               # a!) COPIA para NO Modificar el original.
-                    Ver_Códigos_FALTANTES.reset_index(drop=True, inplace=True)    # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
-                    Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1    # c!) Empezar el ÍNDICE desde el 1.
+                    Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()                     # a!) COPIA para NO Modificar el original.
+                    Ver_Códigos_FALTANTES= Ver_Códigos_FALTANTES.reset_index(drop=True) # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
+                    Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1          # c!) Empezar el ÍNDICE desde el 1.
 
                     # d!) REPRESENTAR LOS NÚMERO DE EMPLEADO COMO STRINGS Y SUSTITUIR "<NA>" POR "":
                     Ver_Códigos_FALTANTES['Nº'] = Ver_Códigos_FALTANTES['Nº'].astype(str).replace('<NA>','')
