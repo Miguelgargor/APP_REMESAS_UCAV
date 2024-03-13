@@ -375,7 +375,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
 ############################################################################################################################################################################################
 
 def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, Num_Documento):
-## A) TRATAMIENTO DEL EXCEL DE EMPLEADOS:
+## A) TRATAMIENTO DEL EXCEL DE PROVEEDORES:
     # A.0º) Lectura de los datos LISTA PROVEEDORES:
     df_codigo_proveedores= pd.read_excel(LISTA_PROVEEDORES)
     df_codigo_proveedores= df_codigo_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
@@ -383,7 +383,22 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     # A.1º) Eliminación de las tildes y cambio de Ñ por N:
     df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True, inplace=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # A.2º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
+    # A.2º) Sustitución de "M." y "Mª" por MARIA:
+    df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True, inplace=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.3º) Añadir un ESPACIO (Temporal) detrás de cada punto y cada coma:
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace(',', ', ')
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('.', '. ')
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.4º) Eliminación de "." "," y "-":
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[.]','', regex=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[,]','', regex=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('-',' ', regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.5º) Eliminación de texto entre paréntesis:
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].apply(lambda x: re.sub(r'\(.*?\)', '', x))
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # A.6º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.strip()
     def eliminar2espacios(texto):
         if isinstance(texto, str):
@@ -392,14 +407,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
             return texto
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].apply(eliminar2espacios) # Aplica la función anterior a la columna 'Nombre'.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # A.3º) Sustitución de "M." y "Mª" por MARIA:
-    df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True, inplace=True)
-    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # A.4º) Eliminación de "." y "-":
-    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('[.]','', regex=True)
-    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].str.replace('-',' ', regex=True)
-    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # A.5º) Quedarse sólo con las columnas que interesan:
+    # A.7º) Quedarse sólo con las columnas que interesan:
     df_codigo_proveedores= df_codigo_proveedores[['Nº', 'Nombre', 'Nº teléfono', 'Contacto', 'Alias', 'Saldo (DL)', 'Saldo vencido (DL)', 'Pagos (DL)']]
 #==========================================================================================================================================================================================#
 
@@ -411,27 +419,35 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     # B.1º) Eliminación de las tildes y cambio de Ñ por N:
     df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.2º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
-    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].str.strip()
+    # B.2º) Sustitución de "M." y "Mª" por MARIA:
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.3º) Añadir un ESPACIO (Temporal) detrás de cada punto y cada coma:
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace(',', ', ')
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('.', '. ')
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.4º) Eliminación de "." "," y "-":
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[.]','', regex=True)
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[,]','', regex=True)
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('-',' ', regex=True)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.5º) Eliminación de texto entre paréntesis:
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].apply(lambda x: re.sub(r'\(.*?\)', '', x))
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # B.6º) Eliminación de espacios innecesarios al principio y al final de cada cadena de texto:
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.strip()
     def eliminar2espacios(texto):
         if isinstance(texto, str):
             return re.sub(r'\s{2,}', ' ', texto)   # CAMBIAR 2 ó + ESPACIOS-> Por 1 SÓLO.
         else:
             return texto
-    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].apply(eliminar2espacios) # Aplica la función anterior a la columna 'Beneficiario'.
+    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].apply(eliminar2espacios) # Aplica la función anterior a la columna 'Nombre'.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.3º) Sustitución de "M." y "Mª" por MARIA:
-    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].replace({'Mª':'MARIA', 'M[.]':'MARIA '}, regex=True)
-    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.4º) Eliminación de "." y "-" y "EUR" (del IMPORTE):
-    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('[.]','', regex=True)
-    df_banco_proveedores['Beneficiario_tratado']= df_banco_proveedores['Beneficiario_tratado'].str.replace('-',' ', regex=True)
-    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.5º) Modificación de la columna del IMPORTE:
+    # B.7º) Modificación de la columna del IMPORTE:
     df_banco_proveedores['Importe']= df_banco_proveedores['Importe'].str.replace(' EUR','', regex=True)      # Eliminar "EUR".
     df_banco_proveedores['Importe']= '-' + df_banco_proveedores['Importe'].str.replace('[.]','', regex=True) # Eliminar el "." y poner el Importe en NEGATIVO.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # B.6º) Creación de NUEVA COLUMNA-> "CONCEPTO - PROVEEDOR" para Business Central:
+    # B.8º) Creación de NUEVA COLUMNA-> "CONCEPTO - PROVEEDOR" para Business Central:
     df_banco_proveedores['DESCRIPCION_BC']= df_banco_proveedores.Concepto + ' - ' + df_banco_proveedores.Beneficiario
 #==========================================================================================================================================================================================#
 
