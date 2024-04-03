@@ -378,6 +378,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     return df_FINAL, Importe_Total_Linea_BANCO_VISUALIZACION, Importe_Total_Trabajadores_VISUALIZACION, Importe_Total_Colaboradores_VISUALIZACION, Importe_Total_Profesionales_VISUALIZACION, Num_Retenc_Trabajadores, Num_Retenc_Colaboradores, Num_Retenc_Profesionales, Reten_Importe_0_Trabajadores, Reten_Importe_0_Colaboradores, Reten_Importe_0_Profesionales
 ############################################################################################################################################################################################
 
+
 def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, Num_Documento):
 ## A) TRATAMIENTO DEL EXCEL DE PROVEEDORES:
     # A.0º) Lectura de los datos LISTA PROVEEDORES:
@@ -385,7 +386,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_codigo_proveedores= df_codigo_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.1º) Eliminación de las tildes y cambio de Ñ por N:
-    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
+    df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N', 'A. ':'A ', "D'":'D'}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.2º) Sustitución de "M." y "Mª" por MARIA:
     df_codigo_proveedores['Nombre']= df_codigo_proveedores['Nombre'].replace({'Mª':'MARIA', 'M[.]':'MARIA ', 'M[?]':'MARIA '}, regex=True)
@@ -421,7 +422,7 @@ def PAGO_REMESA_PROVEEDORES(LISTA_PROVEEDORES, EXCEL_REMESA_PROVEEDORES, Fecha, 
     df_banco_proveedores= df_banco_proveedores.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.1º) Eliminación de las tildes y cambio de Ñ por N:
-    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N'}, regex=True)
+    df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario'].replace({'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U', 'Ñ':'N', 'A. ':'A ', "D'":'D'}, regex=True)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # B.2º) Sustitución de "M." y "Mª" por MARIA:
     df_banco_proveedores['Beneficiario_tratado'] = df_banco_proveedores['Beneficiario_tratado'].replace({'Mª':'MARIA', 'M[.]':'MARIA ', 'M[?]':'MARIA '}, regex=True)
