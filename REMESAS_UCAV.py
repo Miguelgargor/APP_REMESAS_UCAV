@@ -62,6 +62,9 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
     # Aplica la función a cada fila y crea la nueva columna
     df_codigo_empleados['Nombre Completo']= df_codigo_empleados.apply(crear_columna_Nombre_Completo, axis=1)
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    # CASO EXCEPCIONAL ELENA EUGENIA BALANYA RODRIGUEZ-PARETS-> Poner ELENA EUGEN BALANYA RODRIGUEZ-PARETS:
+    df_codigo_empleados['Apellidos_Nombre_Cod_Empleado']= df_codigo_empleados['Apellidos_Nombre_Cod_Empleado'].replace('BALANYA RODRIGUEZ-PARETS ELENA EUGENIA', 'BALANYA RODRIGUEZ-PARETS ELENA EUGEN')
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.7º) Quedarse sólo con las columnas que interesan:
     df_codigo_empleados= df_codigo_empleados[['Nº', 'Nombre Completo', 'Apellidos_Nombre_Cod_Empleado']]
 #==========================================================================================================================================================================================#
