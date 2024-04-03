@@ -11,7 +11,7 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
 ## A) TRATAMIENTO DEL EXCEL DE EMPLEADOS:
     ## A.0º) Lectura de los datos CÓDIGO EMPLEADOS:
     df_codigo_empleados= pd.read_excel(EXCEL_CODIGO_EMPLEADOS)
-    df_codigo_empleados= df_codigo_empleados.applymap(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
+    df_codigo_empleados= df_codigo_empleados.map(lambda s: s.upper() if type(s)==str else s)  # Conversión de todos los campos a MAYÚSCULAS.
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     for columna in ['Nombre', 'Primer apellido', 'Segundo apellido']:
         ## A.1º) Eliminación de las tildes y cambio de Ñ por N:
@@ -49,6 +49,10 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
 
     # Aplica la función a cada fila y crea la nueva columna:
     df_codigo_empleados['Apellidos_Nombre_Cod_Empleado']= df_codigo_empleados.apply(crear_columna_Apellidos_Nombre, axis=1)
+    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+    ############# CASO EXCEPCIONAL ELENA EUGENIA BALANYA RODRIGUEZ-PARETS-> Poner ELENA EUGEN BALANYA RODRIGUEZ-PARETS:
+    df_codigo_empleados['Apellidos_Nombre_Cod_Empleado']= df_codigo_empleados['Apellidos_Nombre_Cod_Empleado'].replace('BALANYA RODRIGUEZ PARETS ELENA EUGENIA', 'BALANYA RODRIGUEZ PARETS ELENA EUGEN')
+    
     #............................................................................#
     # b) COLUMNA-> "NOMBRE COMPLETO":
     def crear_columna_Nombre_Completo(row):
@@ -61,9 +65,6 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
 
     # Aplica la función a cada fila y crea la nueva columna
     df_codigo_empleados['Nombre Completo']= df_codigo_empleados.apply(crear_columna_Nombre_Completo, axis=1)
-    #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    # CASO EXCEPCIONAL ELENA EUGENIA BALANYA RODRIGUEZ-PARETS-> Poner ELENA EUGEN BALANYA RODRIGUEZ-PARETS:
-    df_codigo_empleados['Apellidos_Nombre_Cod_Empleado']= df_codigo_empleados['Apellidos_Nombre_Cod_Empleado'].replace('BALANYA RODRIGUEZ-PARETS ELENA EUGENIA', 'BALANYA RODRIGUEZ-PARETS ELENA EUGEN')
     #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
     # A.7º) Quedarse sólo con las columnas que interesan:
     df_codigo_empleados= df_codigo_empleados[['Nº', 'Nombre Completo', 'Apellidos_Nombre_Cod_Empleado']]
@@ -144,7 +145,7 @@ def PAGO_NOMINAS_UCAV(EXCEL_CODIGO_EMPLEADOS, REMESA_NOMINA, Fecha, Num_Document
     num_Filas_UNION= len(df_resultado)
 
     return df_NOMINA, Códigos_FALTANTES, num_Filas_BANCO, num_Filas_UNION
-############################################################################################################################################################################################
+#############################################################################################################################################################################################
 
 def INGRESOS_SEGUROS_UCAV(ARCHIVO_EXCEL_SEGUROS, Fecha, Num_Documento, Mes, COMISION_BANCO):
         ## 1º) LEER DATOS DEL BANCO (+ Modificaciones en la columna de "IMPORTE"):
