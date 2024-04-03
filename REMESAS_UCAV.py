@@ -1009,7 +1009,7 @@ if ELEGIR_OPCION== PROVEEDORES:
                     st.write(''); st.write('') # LÍNEAS en BLANCO.  
 
                     #...........................................................................................................................................#
-                    ## !! VISUALIZAR los CASOS_SIN Nº EMPLEADO:
+                    ## !! VISUALIZAR los CASOS_SIN Nº PROVEEDOR:
                     Ver_Códigos_FALTANTES= Códigos_FALTANTES.copy()                     # a!) COPIA para NO Modificar el original.
                     Ver_Códigos_FALTANTES= Ver_Códigos_FALTANTES.reset_index(drop=True) # b!) RESETEAR el ÍNDICE (y eliminar el anterior).
                     Ver_Códigos_FALTANTES.index= Ver_Códigos_FALTANTES.index+1          # c!) Empezar el ÍNDICE desde el 1.
@@ -1025,7 +1025,7 @@ if ELEGIR_OPCION== PROVEEDORES:
 
                     # f!) MOSTRAR los CASOS_SIN Nº PROVEEDOR (En caso de que los haya [df>0]):
                     if len(Códigos_FALTANTES)>0:  # Si hay algún caso que no se encuentre el Nº Proveedor... ("CÓDIO PROVEEDOR"= NAN):
-                        st.warning(f' :red[**NO SE HAN CONSEGUIDO LOS**] :green[**{len(Códigos_FALTANTES)}**] :red[**Nº DE PROOVEDORES SIGUIENTES:** *(Comprobar los nombres del proveedor)*:]', icon='⚠️') # WARNING.
+                        st.warning(f' :red[**NO SE HAN CONSEGUIDO LOS**] :green[**{len(Códigos_FALTANTES)}**] :red[**Nº DE PROVEEDORES SIGUIENTES:** *(Comprobar los nombres del proveedor)*:]', icon='⚠️') # WARNING.
                         st.dataframe(Ver_Códigos_FALTANTES)                                                 # MOSTRAR CASOS SIN Nº PROVEEDOR.
                     #...........................................................................................................................................#
 
