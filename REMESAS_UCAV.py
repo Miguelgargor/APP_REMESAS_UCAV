@@ -515,7 +515,7 @@ st.set_page_config(page_title="REMESAS UCAV",                                   
 ## B) BARRA LATERAL: (Indicar el Tipo de Remesa):
 st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
-INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **PAGO FACTURAS PROVEEDORES / REC. COL.**'
+INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **PAGO FRAS. PROVEEDORES/REC. COL.**'
 ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
                                 options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],                                                                    # Opciones.
                                 captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Rec. Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
