@@ -515,10 +515,10 @@ st.set_page_config(page_title="REMESAS UCAV",                                   
 ## B) BARRA LATERAL: (Indicar el Tipo de Remesa):
 st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
-INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **PAGO FACTURAS PROVEEDORES**'
+INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **PAGO FACTURAS PROVEEDORES / REC. COL.**'
 ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
                                 options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],                                                                    # Opciones.
-                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores.*'])     # Texto Explicativo debajo de cada Opción.
+                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Rec. Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
@@ -939,7 +939,7 @@ if ELEGIR_OPCION== PROVEEDORES:
         #--------------------------------------------------------------------------------------#
     st.write(''); st.write('') # LÍNEAS en BLANCO.
     # Escritura.
-    st.write('Genera el documento con los ***pagos de facturas*** de los diferentes ***Proveedores*** de manera precisa, para tan solo tener que ***copiar y pegar***, facilitando su registro en Business Central.')
+    st.write('Genera el documento con los ***pagos de facturas*** de los diferentes ***Proveedores ó Recibos de Colaboración*** de manera precisa, para tan solo tener que ***copiar y pegar***, facilitando su registro en Business Central.')
     st.write('Primero elige las opciones necesarias a continuación. Después, sólamente tienes que pulsar en *"**GENERAR ASIENTOS CONTABLES**"*.')
     st.write(''); st.write('') # LÍNEAS en BLANCO.
     #========================================================================================================================================================================================#
