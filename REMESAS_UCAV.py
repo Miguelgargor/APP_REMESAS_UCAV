@@ -251,7 +251,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_TRABAJADORES['Tipo documento']= 'Pago'
     df_TRABAJADORES['Nº documento']= Num_Documento
     df_TRABAJADORES['Tipo mov.']= 'Cuenta'
-    df_TRABAJADORES['Nº cuenta']= '47510001'                                # RETENCIONES de TRABAJADORES !!!
+    df_TRABAJADORES['Nº cuenta']= df1['Nº cuenta']                                # RETENCIONES de TRABAJADORES !!!
     df_TRABAJADORES['Tipo contrapartida']= 'Cuenta'
     df_TRABAJADORES['Op. triangular']='No'
     df_TRABAJADORES['Corrección']= 'No'
@@ -286,7 +286,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_COLABORADORES['Tipo documento']= 'Pago'
     df_COLABORADORES['Nº documento']= Num_Documento
     df_COLABORADORES['Tipo mov.']= 'Cuenta'
-    df_COLABORADORES['Nº cuenta']= '47510002'                                # RETENCIONES de COLABORADORES !!!
+    df_COLABORADORES['Nº cuenta']= df2['Cuenta retención']                                # RETENCIONES de COLABORADORES !!!
     df_COLABORADORES['Tipo contrapartida']= 'Cuenta'
     df_COLABORADORES['Op. triangular']='No'
     df_COLABORADORES['Corrección']= 'No'
@@ -324,7 +324,7 @@ def PAGO_RETENCIONES_UCAV(ARCHIVO_EXCEL_RETENCIONES, Fecha, Num_Documento, TRIME
     df_PROFESIONALES['Tipo documento']= 'Pago'
     df_PROFESIONALES['Nº documento']= Num_Documento
     df_PROFESIONALES['Tipo mov.']= 'Cuenta'
-    df_PROFESIONALES['Nº cuenta']= '47510003'                                # RETENCIONES de COLABORADORES !!!
+    df_PROFESIONALES['Nº cuenta']= df3['Cuenta retención']                                # RETENCIONES de COLABORADORES !!!
     df_PROFESIONALES['Tipo contrapartida']= 'Cuenta'
     df_PROFESIONALES['Op. triangular']='No'
     df_PROFESIONALES['Corrección']= 'No'
