@@ -531,7 +531,7 @@ opciones = [
 ]
 
 # Mostrar el radio button con opciones
-ELEGIR_OPCION = st.radio('Seleccione una opción:', opciones, index=0)
+ELEGIR_OPCION = st.sidebar.radio('Seleccione una opción:', opciones, index=0)
 
 
 
