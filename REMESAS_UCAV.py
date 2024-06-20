@@ -714,7 +714,9 @@ if ELEGIR_OPCION== SEGUROS_SALUD:
         # Obtener la fecha del DÍA 28 del MES ANTERIOR al actual:
         Fecha_defecto= datetime.now() - timedelta(days=datetime.now().day)     # ÚLTIMO DÍA MES ANTERIOR (Fecha Actual - Día Actual de Este Mes= Último Día Mes Anterior).
         Fecha_defecto= Fecha_defecto.replace(day=28)                           # REEMPLAZAR POR EL DÍA 28.
-        Fecha= st.date_input(label=":blue[**Fecha-SS**]", value=Fecha_defecto, format="DD/MM/YYYY", label_visibility='collapsed') # ENTRADA DE FECHA.
+        Fecha= st.date_input(label=":blue[**Fecha-SS**]", value=Fecha_defecto,
+                             # format="DD/MM/YYYY",
+                             label_visibility='collapsed') # ENTRADA DE FECHA.
     #.................................................................#
     with c4:
         st.markdown('###### :page_with_curl: Nº DOCUMENTO:', help=':blue[**Ejemplo:**] BS2324-0001') # TÍTULO + SÍMBOLO HOJA.
@@ -816,7 +818,9 @@ if ELEGIR_OPCION== RETENCIONES:
         # Obtener la fecha del DÍA 28 del MES ANTERIOR al actual:
         Fecha_defecto= datetime.now() - timedelta(days=datetime.now().day)          # ÚLTIMO DÍA MES ANTERIOR (Fecha Actual - Día Actual de Este Mes= Último Día Mes Anterior).
         Fecha_defecto= Fecha_defecto.replace(day=28)                                # REEMPLAZAR POR EL DÍA 28.
-        Fecha= st.date_input(label=":blue[**Fecha-Reten**]", value=Fecha_defecto, format="DD/MM/YYYY", label_visibility='collapsed') # ENTRADA DE FECHA.
+        Fecha= st.date_input(label=":blue[**Fecha-Reten**]", value=Fecha_defecto,
+                             # format="DD/MM/YYYY",
+                             label_visibility='collapsed') # ENTRADA DE FECHA.
     #.................................................................#
     with c3:
         st.markdown('###### :page_with_curl: Nº DOCUMENTO:', help=':blue[**Ejemplo:**] BS2324-0001')    # TÍTULO + SÍMBOLO HOJA.
@@ -968,7 +972,9 @@ if ELEGIR_OPCION== PROVEEDORES:
         # Obtener la fecha del DÍA 28 del MES ANTERIOR al actual:
         Fecha_defecto= datetime.now() - timedelta(days=datetime.now().day)     # ÚLTIMO DÍA MES ANTERIOR (Fecha Actual - Día Actual de Este Mes= Último Día Mes Anterior).
         Fecha_defecto= Fecha_defecto.replace(day=28)                           # REEMPLAZAR POR EL DÍA 28.
-        Fecha= st.date_input(label="Fecha de Pago", value=Fecha_defecto, format="DD/MM/YYYY", label_visibility='collapsed') # ENTRADA DE FECHA.
+        Fecha= st.date_input(label="Fecha de Pago", value=Fecha_defecto,
+                             # format="DD/MM/YYYY",
+                             label_visibility='collapsed') # ENTRADA DE FECHA.
     #.................................................................#
     with c4:
         st.markdown('###### :page_with_curl: Nº DOCUMENTO:', help=':blue[**Ejemplo:**] BS2324-0001') # TÍTULO + SÍMBOLO HOJA.
