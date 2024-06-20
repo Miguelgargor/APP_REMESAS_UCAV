@@ -523,8 +523,8 @@ st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 
 # Definición de opciones con emojis y texto formateado
 opciones = [
-    '🏠 INICIO',
-    '💰 NÓMINAS',
+    '🏠 **INICIO**',
+    '💰 **NÓMINAS**',
     '❤️ SEGUROS SALUD',
     '🏛️ RETENCIONES',
     '📦 FRAS. PROVEEDORES / REC. COL.'
