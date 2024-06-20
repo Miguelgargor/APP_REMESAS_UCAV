@@ -522,16 +522,14 @@ st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 
 
 # Definición de opciones con emojis y texto formateado
-opciones = [
-    '🏠 **INICIO**',
-    '💰 **NÓMINAS**',
-    '❤️ SEGUROS SALUD',
-    '🏛️ RETENCIONES',
-    '📦 FRAS. PROVEEDORES / REC. COL.'
-]
+opciones = ['🏠 INICIO',
+            '💰 NÓMINAS',
+            '❤️ SEGUROS SALUD',
+            '🏛️ RETENCIONES',
+            '📦 FRAS. PROVEEDORES / REC. COL.']
 
 # Mostrar el radio button con opciones
-ELEGIR_OPCION = st.sidebar.radio('Seleccione una opción:', opciones, index=0)
+ELEGIR_OPCION = st.sidebar.radio(label='', options=opciones, index=0)
 
 
 
@@ -545,7 +543,7 @@ st.sidebar.write('miguel.garcia@ucavila.es')
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 ## C) CUERPO DE LA PÁGINA WEB-> INICIO: (PÁGINA POR DEFECTO):
-if ELEGIR_OPCION== INICIO:
+if ELEGIR_OPCION== '🏠 INICIO':
     col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
     with col1:                       # URL HIPERVÍNCULO #      # Se abrirá en una nueva pestaña #    # URL IMAGEN #                                                                     # ANCHO #
         col1 = st.markdown('<a href="https://www.ucavila.es/" target="_blank"><img src="https://raw.githubusercontent.com/Miguelgargor/IMAGENES_APPs/main/UCAV_logo.png" alt="UCAV Logo" width="300"></a>',
@@ -561,7 +559,7 @@ if ELEGIR_OPCION== INICIO:
 ############################################################################################################################################################################################
 
 ## D) CUERPO DE LA PÁGINA WEB-> NÓMINAS:
-if ELEGIR_OPCION== NOMINAS:
+if ELEGIR_OPCION== '💰 NÓMINAS':
     col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
 
     ## D.1.) IMAGEN CON HIPERVÍNCULO: (En la Columna 1) + TÍTULO PÁGINA WEB (En la Columna 3) + TEXTO EXPLICATIVO:
@@ -692,7 +690,7 @@ if ELEGIR_OPCION== NOMINAS:
 ############################################################################################################################################################################################
 
 ## E) CUERPO DE LA PÁGINA WEB-> SEGUROS SALUD:
-if ELEGIR_OPCION== SEGUROS_SALUD:
+if ELEGIR_OPCION== '❤️ SEGUROS SALUD':
     col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
 
     ## E.1.) IMAGEN CON HIPERVÍNCULO: (En la Columna 1) + TÍTULO PÁGINA WEB (En la Columna 3) + TEXTO EXPLICATIVO:
@@ -796,7 +794,7 @@ if ELEGIR_OPCION== SEGUROS_SALUD:
 ############################################################################################################################################################################################
             
 ## F) CUERPO DE LA PÁGINA WEB-> RETENCIONES:
-if ELEGIR_OPCION== RETENCIONES:
+if ELEGIR_OPCION== '🏛️ RETENCIONES':
     col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
 
     ## F.1.) IMAGEN CON HIPERVÍNCULO: (En la Columna 1) + TÍTULO PÁGINA WEB (En la Columna 3) + TEXTO EXPLICATIVO:
@@ -950,7 +948,7 @@ if ELEGIR_OPCION== RETENCIONES:
 ############################################################################################################################################################################################
 
 ## H) CUERPO DE LA PÁGINA WEB-> REMESA PROVEEDORES:
-if ELEGIR_OPCION== PROVEEDORES:
+if ELEGIR_OPCION== '📦 FRAS. PROVEEDORES / REC. COL.':
     col1, col2, col3 = st.columns([40, 0.5, 59.95])   # COLUMNAS CON DISTINTOS ANCHOS. (En %).
 
     ## H.1.) IMAGEN CON HIPERVÍNCULO: (En la Columna 1) + TÍTULO PÁGINA WEB (En la Columna 3) + TEXTO EXPLICATIVO:
