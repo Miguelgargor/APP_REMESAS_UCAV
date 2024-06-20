@@ -517,8 +517,8 @@ st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
 INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **FRAS. PROVEEDORES / REC. COL.**'
 ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
-                                options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],                                                                    # Opciones.
-                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Recibos de Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
+                                options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],  )                                                                  # Opciones.
+                            #    captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Recibos de Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
@@ -584,7 +584,9 @@ if ELEGIR_OPCION== NOMINAS:
         # Obtener la fecha del DÍA 28 del MES ANTERIOR al actual:
         Fecha_defecto= datetime.now() - timedelta(days=datetime.now().day)     # ÚLTIMO DÍA MES ANTERIOR (Fecha Actual - Día Actual de Este Mes= Último Día Mes Anterior).
         Fecha_defecto= Fecha_defecto.replace(day=28)                           # REEMPLAZAR POR EL DÍA 28.
-        Fecha= st.date_input(label=":blue[**Fecha de Pago**]", value=Fecha_defecto, format="DD/MM/YYYY", label_visibility='collapsed') # ENTRADA DE FECHA.
+        Fecha= st.date_input(label=":blue[**Fecha de Pago**]", value=Fecha_defecto,
+                             # format="DD/MM/YYYY",
+                             label_visibility='collapsed') # ENTRADA DE FECHA.
     #.................................................................#
     with c4:
         st.markdown('###### :page_with_curl: Nº DOCUMENTO:', help=':blue[**Ejemplo:**] BS2324-0001') # TÍTULO + SÍMBOLO HOJA.
