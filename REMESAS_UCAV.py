@@ -518,7 +518,7 @@ st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **FRAS. PROVEEDORES / REC. COL.**'
 ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
                                 options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],     )                                                               # Opciones.
-                            #    captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Recibos de Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
+                                captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Recibos de Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
