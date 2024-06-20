@@ -515,10 +515,28 @@ st.set_page_config(page_title="REMESAS UCAV",                                   
 ## B) BARRA LATERAL: (Indicar el Tipo de Remesa):
 st.sidebar.title('⚙️ :red[REMESAS]') # TÍTULO BARRA LATERAL.
 # OPCIONES:
-INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **FRAS. PROVEEDORES / REC. COL.**'
-ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
-                                options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],  )                                                                  # Opciones.
+#INICIO=':house: **INICIO**'; NOMINAS=':moneybag: **NÓMINAS**'; SEGUROS_SALUD=':heart: **SEGUROS SALUD**'; RETENCIONES=':classical_building: **RETENCIONES**'; PROVEEDORES= ':package: **FRAS. PROVEEDORES / REC. COL.**'
+#ELEGIR_OPCION= st.sidebar.radio(label=' ', label_visibility='hidden',                                                                                                  # Título Oculto Selector.
+ #                               options=[INICIO, NOMINAS, SEGUROS_SALUD, RETENCIONES, PROVEEDORES],  )                                                                  # Opciones.
                             #    captions=['','*Remesa de Nóminas.*', '*Ingreso de Seguros de Salud.*', '*Pago de Retenciones.*', '*Pago remesa de Proveedores y Recibos de Colaboración.*'])     # Texto Explicativo debajo de cada Opción.
+
+
+# Definición de opciones con emojis y texto formateado
+opciones = [
+    '🏠 INICIO',
+    '💰 NÓMINAS',
+    '❤️ SEGUROS SALUD',
+    '🏛️ RETENCIONES',
+    '📦 FRAS. PROVEEDORES / REC. COL.'
+]
+
+# Mostrar el radio button con opciones
+ELEGIR_OPCION = st.radio('Seleccione una opción:', opciones, index=0)
+
+
+
+
+
 
 st.sidebar.divider() # Divisor.
 st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write(''); st.sidebar.write('')
