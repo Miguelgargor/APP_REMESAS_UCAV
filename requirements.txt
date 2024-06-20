@@ -1,6 +1,6 @@
 pandas
 numpy
-streamlit==1.33.0
+streamlit
 datetime
 timedelta
 openpyxl
