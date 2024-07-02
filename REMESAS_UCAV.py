@@ -591,7 +591,7 @@ if ELEGIR_OPCION== '💰 NÓMINAS':
             LISTA_EMPLEADOS = st.file_uploader(label='Lista_Empleados', type=["xlsx", "xls"], label_visibility='collapsed')        # SUBIR UN ARCHIVO.
     #.................................................................#
     with c2:
-        st.markdown('###### :open_file_folder: REMESA DEL BANCO:')            # Encabezado + SÍMBOLO CARPETA.
+        st.markdown('###### :open_file_folder: REMESA NÓMINAS BANCO:')            # Encabezado + SÍMBOLO CARPETA.
         with st.expander(':blue[**Cargar excel con la Remesa de Nóminas**]'):  # BOTÓN QUE SE ABRE.
             REMESA_NOMINAS_BANCO = st.file_uploader(label='Remesa_Banco', type=["xlsx", "xls"], label_visibility='collapsed')      # SUBIR UN ARCHIVO.
     #.................................................................#
@@ -979,7 +979,7 @@ if ELEGIR_OPCION== '📦 FRAS. PROVEEDORES / REC. COL.':
             LISTA_PROVEEDORES = st.file_uploader(label='Lista_Proveedores', type=["xlsx", "xls"], label_visibility='collapsed')        # SUBIR UN ARCHIVO.
     #.................................................................#
     with c2:
-        st.markdown('###### :open_file_folder: REMESA NÓMINAS BANCO:')             # Encabezado + SÍMBOLO CARPETA.
+        st.markdown('###### :open_file_folder: REMESA DEL BANCO:')             # Encabezado + SÍMBOLO CARPETA.
         with st.expander(':blue[**Cargar excel con la Remesa de Proveedores**]'):  # BOTÓN QUE SE ABRE.
             EXCEL_REMESA_PROVEEDORES = st.file_uploader(label='Remesa_Banco_Prov', type=["xlsx", "xls"], label_visibility='collapsed')  # SUBIR UN ARCHIVO.
     #.................................................................#
